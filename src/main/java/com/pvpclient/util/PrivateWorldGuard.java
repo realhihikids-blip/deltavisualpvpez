@@ -14,14 +14,20 @@ public final class PrivateWorldGuard {
     public static boolean isAuthorized(MinecraftClient mc) {
         if (mc.world == null) return false;
         if (mc.isInSingleplayer()) return true;
+        
         ServerInfo info = mc.getCurrentServerEntry();
         if (info == null || info.address == null) return false;
+        
         String host = info.address.trim().toLowerCase();
         int colon = host.lastIndexOf(':');
-        if (colon > 0 && host.indexOf(':') == colon) host = host.substring(0, colon);
+        if (colon > 0 && host.indexOf(':') == colon) {
+            host = host.substring(0, colon);
+        }
+        
         for (String allowed : ConfigManager.authorizedServers()) {
             if (allowed.trim().equalsIgnoreCase(host)) return true;
         }
+        
         return false;
     }
 }
